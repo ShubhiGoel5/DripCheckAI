@@ -34,7 +34,8 @@ export const setStoredProfile = (profile: UserProfile): void => {
   localStorage.setItem("dripcheck_user_profile", JSON.stringify(profile));
 };
 
-const API_BASE_URL = import.meta.env.PROD ? '/api' : 'http://localhost:5000';
+
+const API_BASE_URL = import.meta.env.PROD ? '' : 'http://localhost:5000';
 
 export const getAnalysisHistory = async (): Promise<any[]> => {
   try {
