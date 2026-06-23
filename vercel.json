@@ -1,8 +1,4 @@
 {
-  "routes": [
-    { "src": "/api/(.*)", "dest": "/backend/server.js" },
-    { "src": "/(.*)", "dest": "/" }
-  ],
   "builds": [
     {
       "src": "backend/server.js",
@@ -15,5 +11,10 @@
         "distDir": "dist"
       }
     }
+  ],
+  "routes": [
+    { "src": "/api/(.*)", "dest": "/backend/server.js" },
+    { "handle": "filesystem" },
+    { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
