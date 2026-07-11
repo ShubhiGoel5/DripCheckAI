@@ -93,12 +93,12 @@ export const DripScore = ({ score, confidence = "High", scoresData }: DripScoreP
         <TooltipProvider>
           <div className="w-full space-y-3.5 border-t border-border pt-5">
             <h4 className="text-xs font-black uppercase tracking-wider text-[#784BA0]">Fashion Breakdown</h4>
-            <div className="grid gap-3.5 sm:grid-cols-2">
+            <div className="grid gap-3">
               {subscores.map((sub) => (
                 <div key={sub.label} className="rounded-xl bg-muted/50 p-2.5 border border-border shadow-sm transition-all hover:bg-muted">
-                  <div className="mb-1.5 flex flex-wrap items-start justify-between gap-1 sm:flex-nowrap">
-                    <span className="flex items-center gap-1 text-[11px] font-black text-foreground leading-tight min-w-0">
-                      <span className="truncate break-words whitespace-normal">{sub.label}</span>
+                  <div className="mb-2 flex items-center justify-between gap-2">
+                    <span className="flex items-center gap-1.5 text-[11px] sm:text-xs font-black text-foreground">
+                      {sub.label}
                       <Tooltip>
                         <TooltipTrigger asChild>
                           <button type="button" className="text-[#6B5472] hover:text-[#FF3CAC] shrink-0">
