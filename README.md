@@ -23,7 +23,7 @@ Designed with a sleek, futuristic **Glassmorphism B2B Dashboard** aesthetic, Dri
 ## 🚀 Live Demo
 
 The application is fully deployed and accessible on Vercel:
-👉 **[View DripCheckAI Live]([https://outfit-code-correct-main.vercel.app/](https://drip-check-ai.vercel.app/))**
+👉 **[View DripCheckAI Live](https://drip-check-ai.vercel.app)**
 
 *(Ensure your backend is running or deployed correctly to utilize the AI features).*
 
