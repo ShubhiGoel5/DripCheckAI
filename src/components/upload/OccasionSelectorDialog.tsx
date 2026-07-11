@@ -74,7 +74,7 @@ export const OccasionSelectorDialog = ({
                   "flex items-center gap-3 rounded-xl border p-3 text-left transition-all duration-300",
                   isSelected
                     ? "border-primary bg-primary/10 shadow-glow"
-                    : "border-white/10 bg-black/20 hover:bg-white/5 hover:border-white/30"
+                    : "border-border bg-muted/50 hover:bg-muted hover:border-border/80"
                 )}
               >
                 <Icon className={cn("h-4 w-4 flex-shrink-0", isSelected ? "text-primary" : occ.color)} />
@@ -85,8 +85,8 @@ export const OccasionSelectorDialog = ({
         </div>
 
         {/* Profile Info Summary */}
-        <div className="rounded-xl border border-white/10 bg-black/20 p-4 relative">
-          <div className="flex items-center justify-between border-b border-white/10 pb-2 mb-2">
+        <div className="rounded-xl border border-border bg-muted/50 p-4 relative">
+          <div className="flex items-center justify-between border-b border-border pb-2 mb-2">
             <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Stylist Profile Context</span>
             <button
               type="button"
@@ -111,7 +111,7 @@ export const OccasionSelectorDialog = ({
             type="button"
             variant="ghost"
             onClick={() => onOpenChange(false)}
-            className="h-11 rounded-full hover:bg-white/5"
+            className="h-11 rounded-full hover:bg-muted"
           >
             Cancel
           </Button>
