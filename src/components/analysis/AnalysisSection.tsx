@@ -57,13 +57,13 @@ export const AnalysisSection = ({ result, isLoading, imageUrl }: AnalysisSection
       {isLoading && <PipelineProgress />}
 
       {!isLoading && !result && (
-        <div className="rounded-2xl glass-panel p-10 sm:p-16 text-center shadow-lg relative overflow-hidden group">
+        <div className="rounded-2xl bg-card/70 border border-border backdrop-blur-xl p-10 sm:p-16 text-center shadow-lg relative overflow-hidden group">
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
           <div className="relative z-10">
-            <div className="mx-auto mb-6 grid h-20 w-20 place-items-center rounded-2xl bg-white/5 border border-white/10 shadow-glow backdrop-blur-md transition-transform duration-500 group-hover:scale-110">
+            <div className="mx-auto mb-6 grid h-20 w-20 place-items-center rounded-2xl bg-muted border border-border shadow-sm transition-transform duration-500 group-hover:scale-110">
               <Eye className="h-8 w-8 text-primary" aria-hidden="true" />
             </div>
-            <h3 className="text-3xl font-bold tracking-tight text-white mb-4">Upload a look to reveal the pipeline.</h3>
+            <h3 className="text-3xl font-bold tracking-tight text-foreground mb-4">Upload a look to reveal the pipeline.</h3>
             <p className="mx-auto max-w-xl text-base text-muted-foreground">
               Garments, colors, style probabilities, score logic, and recommendations will appear here as structured outputs.
             </p>

@@ -26,21 +26,21 @@ export const RecommendationsCard = ({ recommendations }: RecommendationsCardProp
     <GlassCard className="p-6">
       <div className="mb-6">
         <p className="text-sm font-black uppercase text-[#FF3CAC]">Stage 7</p>
-        <h3 className="font-display text-3xl font-black text-white">Styling Recommendations</h3>
+        <h3 className="font-display text-3xl font-black text-foreground">Styling Recommendations</h3>
         <p className="mt-2 text-sm font-semibold leading-relaxed text-[#5F4967]">
           Categorized, actionable steps recommended by the AI stylist to upgrade your outfit's aesthetic and score.
         </p>
       </div>
 
       <Tabs defaultValue="immediate" className="w-full">
-        <TabsList className="flex flex-wrap h-auto gap-2 bg-white/20 p-2 rounded-2xl border border-white/40 shadow-inner mb-6">
+        <TabsList className="flex flex-wrap h-auto gap-2 bg-muted p-2 rounded-2xl border border-border shadow-inner mb-6">
           {categories.map((cat) => {
             const Icon = cat.icon;
             return (
               <TabsTrigger
                 key={cat.value}
                 value={cat.value}
-                className="flex items-center gap-1.5 rounded-xl px-4 py-2 text-xs font-black text-[#4F3A56] transition-all data-[state=active]:bg-[#171018] data-[state=active]:text-white data-[state=active]:shadow-md"
+                className="flex items-center gap-1.5 rounded-xl px-4 py-2 text-xs font-black text-[#4F3A56] transition-all data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-md"
               >
                 <Icon className="h-3.5 w-3.5" />
                 {cat.label}
@@ -58,7 +58,7 @@ export const RecommendationsCard = ({ recommendations }: RecommendationsCardProp
             ) : (
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                 {cat.data.map((item, idx) => (
-                  <div key={idx} className="flex flex-col justify-between rounded-2xl border border-white/60 bg-white/58 p-5 shadow-sm transition-all hover:bg-white/70">
+                  <div key={idx} className="flex flex-col justify-between rounded-2xl border border-border bg-background p-5 shadow-sm transition-all hover:bg-muted/50">
                     <div>
                       <div className="mb-4 flex items-center justify-between">
                         <Sparkles className="h-4.5 w-4.5 text-[#FF3CAC]" aria-hidden="true" />
@@ -68,7 +68,7 @@ export const RecommendationsCard = ({ recommendations }: RecommendationsCardProp
                           {item.priority} Priority
                         </span>
                       </div>
-                      <h4 className="font-display text-xl font-black text-white">{item.title}</h4>
+                      <h4 className="font-display text-xl font-black text-foreground">{item.title}</h4>
                       <p className="mt-2 text-xs font-semibold leading-relaxed text-[#5F4967]">{item.detail}</p>
                     </div>
                     <div className="mt-5 flex items-center gap-1 text-xs font-black text-[#784BA0]">

@@ -17,7 +17,7 @@ export const ColorAnalysisCard = ({ colorsData, harmonyScore }: ColorAnalysisCar
     <div className="mb-5 flex items-start justify-between gap-4">
       <div>
         <p className="text-sm font-black uppercase text-[#784BA0]">Stage 2</p>
-        <h3 className="font-display text-3xl font-black text-white">Color Science Analysis</h3>
+        <h3 className="font-display text-3xl font-black text-foreground">Color Science Analysis</h3>
       </div>
       <Palette className="h-7 w-7 text-[#FF3CAC]" aria-hidden="true" />
     </div>
@@ -31,11 +31,11 @@ export const ColorAnalysisCard = ({ colorsData, harmonyScore }: ColorAnalysisCar
               <div className="mb-1.5 flex items-center justify-between gap-3">
                 <div className="flex items-center gap-2">
                   <span className="h-6 w-6 rounded-lg border-2 border-white shadow-sm" style={{ backgroundColor: color.hex }} />
-                  <p className="text-xs font-black text-white">{color.name}</p>
+                  <p className="text-xs font-black text-foreground">{color.name}</p>
                 </div>
                 <p className="text-xs font-black text-[#784BA0]">{color.percentage}%</p>
               </div>
-              <div className="h-2 overflow-hidden rounded-full bg-white/78">
+              <div className="h-2 overflow-hidden rounded-full bg-muted">
                 <div className="h-full rounded-full transition-all duration-1000" style={{ width: `${color.percentage}%`, backgroundColor: color.hex }} />
               </div>
             </div>
@@ -48,7 +48,7 @@ export const ColorAnalysisCard = ({ colorsData, harmonyScore }: ColorAnalysisCar
           <label className="text-[10px] font-black uppercase tracking-wider text-[#784BA0]">Accent Colors</label>
           <div className="mt-2 flex flex-wrap gap-1.5">
             {colorsData.accentColors.map((color, idx) => (
-              <span key={idx} className="rounded-lg bg-white/10 px-2 py-1 text-xs font-bold text-white border border-white/80 shadow-sm">
+              <span key={idx} className="rounded-lg bg-muted px-2 py-1 text-xs font-bold text-foreground border border-border shadow-sm">
                 {color}
               </span>
             ))}
@@ -56,7 +56,7 @@ export const ColorAnalysisCard = ({ colorsData, harmonyScore }: ColorAnalysisCar
         </div>
       )}
 
-      <div className="rounded-2xl border border-white/40 bg-white/30 p-3.5 shadow-sm">
+      <div className="rounded-2xl border border-border bg-muted/50 p-3.5 shadow-sm">
         <p className="text-[10px] font-black uppercase tracking-wider text-[#784BA0]">Harmony Type</p>
         <p className="mt-1 text-sm font-black text-[#FF3CAC]">{colorsData.harmonyType}</p>
         <p className="mt-2 text-xs font-semibold leading-relaxed text-[#5F4967]">
@@ -65,12 +65,12 @@ export const ColorAnalysisCard = ({ colorsData, harmonyScore }: ColorAnalysisCar
       </div>
     </div>
 
-    <div className="mt-5 rounded-2xl bg-white/58 p-4">
+    <div className="mt-5 rounded-2xl bg-muted/30 p-4">
       <div className="mb-2 flex items-center justify-between">
-        <p className="text-xs font-black text-white">Harmony Score</p>
+        <p className="text-xs font-black text-foreground">Harmony Score</p>
         <p className="text-sm font-black text-[#FF3CAC]">{harmonyScore}/100</p>
       </div>
-      <div className="h-2.5 overflow-hidden rounded-full bg-white/10">
+      <div className="h-2.5 overflow-hidden rounded-full bg-muted">
         <div className="h-full rounded-full bg-[linear-gradient(90deg,#FF3CAC,#784BA0,#2BFFFE)] transition-all duration-1000" style={{ width: `${harmonyScore}%` }} />
       </div>
     </div>

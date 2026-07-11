@@ -37,7 +37,7 @@ export const PipelineProgress = () => {
 
         <div>
           <p className="text-sm font-black uppercase text-[#FF3CAC]">Visual analysis in progress</p>
-          <h3 className="mt-2 font-display text-4xl font-black leading-none text-white">Building the evidence trail</h3>
+          <h3 className="mt-2 font-display text-4xl font-black leading-none text-foreground">Building the evidence trail</h3>
           <div className="mt-7 space-y-4">
             {steps.map((step, index) => {
               const isComplete = index < activeStep;
@@ -49,7 +49,7 @@ export const PipelineProgress = () => {
                   initial={{ opacity: 0, x: 18 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.35, delay: index * 0.05 }}
-                  className="rounded-2xl border border-white/60 bg-white/56 p-4 shadow-[0_12px_34px_rgba(120,75,160,0.1)]"
+                  className="rounded-2xl border border-border bg-card p-4 shadow-[0_12px_34px_rgba(120,75,160,0.1)]"
                 >
                   <div className="flex items-center gap-3">
                     <span className="grid h-9 w-9 place-items-center rounded-full bg-[linear-gradient(135deg,#FF3CAC,#784BA0,#2BFFFE)] text-white">
@@ -57,10 +57,10 @@ export const PipelineProgress = () => {
                     </span>
                     <div className="flex-1">
                       <div className="flex items-center justify-between gap-3">
-                        <p className="font-black text-white">{step}</p>
+                        <p className="font-black text-foreground">{step}</p>
                         <p className="text-xs font-black uppercase text-[#6A5571]">{isComplete ? "Complete" : isActive ? "Running" : "Queued"}</p>
                       </div>
-                      <div className="mt-2 h-2 overflow-hidden rounded-full bg-white/70">
+                      <div className="mt-2 h-2 overflow-hidden rounded-full bg-muted">
                         <motion.div
                           className="h-full rounded-full bg-[linear-gradient(90deg,#FF3CAC,#784BA0,#2BFFFE)]"
                           initial={{ width: "0%" }}

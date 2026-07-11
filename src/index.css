@@ -4,33 +4,33 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
-    --background: 257 30% 12%; /* #1c1629 */
-    --foreground: 267 65% 96%; /* #f6f1fc */
+  :root, .dark {
+    --background: 0 0% 98%; /* #fafafa */
+    --foreground: 240 10% 3.9%; /* #09090b */
 
-    --card: 260 42% 16%;
-    --card-foreground: 267 65% 96%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
 
-    --popover: 260 42% 16%;
-    --popover-foreground: 267 65% 96%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
 
     --primary: 285 76% 59%; /* #bd45e6 */
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 262 76% 28%; /* #311081 */
-    --secondary-foreground: 267 65% 96%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
 
-    --muted: 250 15% 25%;
-    --muted-foreground: 267 30% 70%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
 
-    --accent: 225 100% 79%; /* #96b1ff */
-    --accent-foreground: 257 30% 12%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
 
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 85% 97%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 260 30% 25%;
-    --input: 260 30% 25%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
     --ring: 285 76% 59%;
 
     --radius: 0.75rem;
@@ -38,36 +38,6 @@
     --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     --font-serif: Georgia, Cambria, 'Times New Roman', Times, serif;
     --font-mono: 'SFMono-Regular', Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
-  }
-
-  .dark {
-    --background: 257 30% 12%;
-    --foreground: 267 65% 96%;
-
-    --card: 260 42% 16%;
-    --card-foreground: 267 65% 96%;
-
-    --popover: 260 42% 16%;
-    --popover-foreground: 267 65% 96%;
-
-    --primary: 285 76% 59%;
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 262 76% 28%;
-    --secondary-foreground: 267 65% 96%;
-
-    --muted: 250 15% 25%;
-    --muted-foreground: 267 30% 70%;
-
-    --accent: 225 100% 79%;
-    --accent-foreground: 257 30% 12%;
-
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 85% 97%;
-
-    --border: 260 30% 25%;
-    --input: 260 30% 25%;
-    --ring: 285 76% 59%;
   }
 }
 
@@ -80,7 +50,7 @@
     @apply bg-background text-foreground antialiased;
     font-feature-settings: "rlig" 1, "calt" 1;
     min-width: 320px;
-    background: radial-gradient(circle at 50% -20%, hsl(262 76% 28% / 0.4), transparent 50%),
+    background: radial-gradient(circle at 50% -20%, hsl(285 76% 59% / 0.1), transparent 50%),
                 hsl(var(--background));
   }
 

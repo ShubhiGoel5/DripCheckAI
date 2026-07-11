@@ -79,7 +79,7 @@ export const DripScore = ({ score, confidence = "High", scoresData }: DripScoreP
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.45 }}
-              className="font-display text-5xl font-black leading-none text-white"
+              className="font-display text-5xl font-black leading-none text-foreground"
             >
               {score}
             </motion.p>
@@ -91,13 +91,13 @@ export const DripScore = ({ score, confidence = "High", scoresData }: DripScoreP
       {/* Subscores Grid */}
       {subscores.length > 0 && (
         <TooltipProvider>
-          <div className="w-full space-y-3.5 border-t border-white/50 pt-5">
+          <div className="w-full space-y-3.5 border-t border-border pt-5">
             <h4 className="text-xs font-black uppercase tracking-wider text-[#784BA0]">Fashion Breakdown</h4>
             <div className="grid gap-3.5 sm:grid-cols-2">
               {subscores.map((sub) => (
-                <div key={sub.label} className="rounded-xl bg-white/40 p-2.5 border border-white/40 shadow-sm transition-all hover:bg-white/10">
+                <div key={sub.label} className="rounded-xl bg-muted/50 p-2.5 border border-border shadow-sm transition-all hover:bg-muted">
                   <div className="mb-1.5 flex flex-wrap items-start justify-between gap-1 sm:flex-nowrap">
-                    <span className="flex items-center gap-1 text-[11px] font-black text-white leading-tight min-w-0">
+                    <span className="flex items-center gap-1 text-[11px] font-black text-foreground leading-tight min-w-0">
                       <span className="truncate break-words whitespace-normal">{sub.label}</span>
                       <Tooltip>
                         <TooltipTrigger asChild>
@@ -112,7 +112,7 @@ export const DripScore = ({ score, confidence = "High", scoresData }: DripScoreP
                     </span>
                     <span className="text-xs font-black text-[#784BA0] shrink-0">{sub.value}/100</span>
                   </div>
-                  <div className="h-2 overflow-hidden rounded-full bg-white/70">
+                  <div className="h-2 overflow-hidden rounded-full bg-muted">
                     <div
                       className="h-full rounded-full bg-[linear-gradient(90deg,#FF3CAC,#784BA0,#2BFFFE)] transition-all duration-1000"
                       style={{ width: `${sub.value}%` }}
