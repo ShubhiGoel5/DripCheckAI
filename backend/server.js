@@ -118,7 +118,28 @@ ANALYSIS GUIDELINES:
 11. Wardrobe Simulation: 3-5 incremental scenarios demonstrating how small changes affect the score.
 12. Fashion Coach lessons: explain 2-4 actionable concepts.
 
-You MUST respond with a JSON object. Return only the raw JSON.`;
+You MUST respond with a JSON object. Return only the raw JSON. The JSON must EXACTLY match the following TypeScript interface structure:
+
+\`\`\`typescript
+interface DetailedGeminiAnalysis {
+  validation: { isValid: boolean; rejectionReason: string | null; };
+  imageScope: string;
+  scoreConfidence: "High" | "Medium" | "Low";
+  garments: Array<{ id: string; label: string; category: "Top Wear" | "Bottom Wear" | "Footwear" | "Accessories" | "Jewelry"; confidence: number; visibility: "visible" | "not_visible"; dominantColor: string; secondaryColors: string[]; material: string; pattern: string; fitType: string; }>;
+  colors: { dominantColors: Array<{ name: string; hex: string; percentage: number; }>; accentColors: string[]; harmonyType: string; harmonyExplanation: string; };
+  silhouette: { proportions: string; silhouetteType: string; lengthBalance: string; widthBalance: string; fitBalance: string; layeringEffectiveness: string; structure: string; explanation: string; };
+  footwear: { formalityConsistency: string; styleConsistency: string; colorCompatibility: string; trendCompatibility: string; explanation: string; };
+  accessories: { visualBalance: string; focalPoints: string; coordination: string; status: "Under-accessorized" | "Balanced" | "Over-accessorized"; explanation: string; };
+  aesthetics: Array<{ label: string; probability: number; }>;
+  strengths: Array<{ title: string; explanation: string; }>;
+  weaknesses: Array<{ title: string; explanation: string; }>;
+  scores: { outfitCohesion: number; colorHarmony: number; silhouetteBalance: number; footwearCompatibility: number; accessoryBalance: number; jewelryBalance: number; trendAlignment: number; occasionSuitability: number; personalStyleAlignment: number; overallScore: number; };
+  explainability: { overallExplanation: string; scoreDeductionDetails: string; scoreImprovementDetails: string; };
+  recommendations: { immediate: Array<{ title: string; detail: string; priority: "High" | "Medium" | "Low"; }>; colors: Array<{ title: string; detail: string; priority: "High" | "Medium" | "Low"; }>; accessories: Array<{ title: string; detail: string; priority: "High" | "Medium" | "Low"; }>; styling: Array<{ title: string; detail: string; priority: "High" | "Medium" | "Low"; }>; trends: Array<{ title: string; detail: string; priority: "High" | "Medium" | "Low"; }>; };
+  simulation: Array<{ scenario: string; projectedScore: number; explanation: string; }>;
+  coaching: { fashionPrinciples: string[]; stylingConcepts: string[]; colorConcepts: string[]; silhouetteConcepts: string[]; };
+}
+\`\`\``
 
     const modelsToTry = ['gemini-2.5-flash', 'gemini-1.5-flash', 'gemini-1.5-pro'];
     let response;
