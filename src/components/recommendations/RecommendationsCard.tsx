@@ -26,7 +26,7 @@ export const RecommendationsCard = ({ recommendations }: RecommendationsCardProp
     <GlassCard className="p-6">
       <div className="mb-6">
         <p className="text-sm font-black uppercase text-[#FF3CAC]">Stage 7</p>
-        <h3 className="font-display text-3xl font-black text-[#171018]">Styling Recommendations</h3>
+        <h3 className="font-display text-3xl font-black text-white">Styling Recommendations</h3>
         <p className="mt-2 text-sm font-semibold leading-relaxed text-[#5F4967]">
           Categorized, actionable steps recommended by the AI stylist to upgrade your outfit's aesthetic and score.
         </p>
@@ -68,7 +68,7 @@ export const RecommendationsCard = ({ recommendations }: RecommendationsCardProp
                           {item.priority} Priority
                         </span>
                       </div>
-                      <h4 className="font-display text-xl font-black text-[#171018]">{item.title}</h4>
+                      <h4 className="font-display text-xl font-black text-white">{item.title}</h4>
                       <p className="mt-2 text-xs font-semibold leading-relaxed text-[#5F4967]">{item.detail}</p>
                     </div>
                     <div className="mt-5 flex items-center gap-1 text-xs font-black text-[#784BA0]">

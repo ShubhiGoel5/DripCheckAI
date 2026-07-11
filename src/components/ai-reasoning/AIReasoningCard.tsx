@@ -15,7 +15,7 @@ export const AIReasoningCard = ({ explainability, strengths, weaknesses }: AIRea
   <GlassCard className="p-6">
     <div className="mb-6">
       <p className="text-sm font-black uppercase text-[#784BA0]">Stage 6</p>
-      <h3 className="font-display text-3xl font-black text-[#171018]">Stylist's Reasoning & Critique</h3>
+      <h3 className="font-display text-3xl font-black text-white">Stylist's Reasoning & Critique</h3>
       <p className="mt-2 text-sm font-semibold leading-relaxed text-[#5F4967]">
         A detailed breakdown of why this score was assigned, including constructive feedback and highlights.
       </p>
@@ -28,7 +28,7 @@ export const AIReasoningCard = ({ explainability, strengths, weaknesses }: AIRea
           <Sparkles className="h-4 w-4 text-[#FF3CAC]" />
           Overall Impression
         </h4>
-        <p className="mt-1.5 text-sm font-semibold leading-relaxed text-[#171018]">
+        <p className="mt-1.5 text-sm font-semibold leading-relaxed text-white">
           {explainability.overallExplanation}
         </p>
       </div>

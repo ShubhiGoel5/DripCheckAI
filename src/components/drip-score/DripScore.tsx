@@ -79,7 +79,7 @@ export const DripScore = ({ score, confidence = "High", scoresData }: DripScoreP
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.45 }}
-              className="font-display text-5xl font-black leading-none text-[#171018]"
+              className="font-display text-5xl font-black leading-none text-white"
             >
               {score}
             </motion.p>
@@ -95,13 +95,13 @@ export const DripScore = ({ score, confidence = "High", scoresData }: DripScoreP
             <h4 className="text-xs font-black uppercase tracking-wider text-[#784BA0]">Fashion Breakdown</h4>
             <div className="grid gap-3.5 sm:grid-cols-2">
               {subscores.map((sub) => (
-                <div key={sub.label} className="rounded-xl bg-white/40 p-2.5 border border-white/40 shadow-sm transition-all hover:bg-white/60">
-                  <div className="mb-1.5 flex items-center justify-between gap-2">
-                    <span className="flex items-center gap-1 text-[11px] font-black text-[#171018]">
-                      {sub.label}
+                <div key={sub.label} className="rounded-xl bg-white/40 p-2.5 border border-white/40 shadow-sm transition-all hover:bg-white/10">
+                  <div className="mb-1.5 flex flex-wrap items-start justify-between gap-1 sm:flex-nowrap">
+                    <span className="flex items-center gap-1 text-[11px] font-black text-white leading-tight min-w-0">
+                      <span className="truncate break-words whitespace-normal">{sub.label}</span>
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <button type="button" className="text-[#6B5472] hover:text-[#FF3CAC]">
+                          <button type="button" className="text-[#6B5472] hover:text-[#FF3CAC] shrink-0">
                             <HelpCircle className="h-3 w-3" />
                           </button>
                         </TooltipTrigger>
@@ -110,7 +110,7 @@ export const DripScore = ({ score, confidence = "High", scoresData }: DripScoreP
                         </TooltipContent>
                       </Tooltip>
                     </span>
-                    <span className="text-xs font-black text-[#784BA0]">{sub.value}/100</span>
+                    <span className="text-xs font-black text-[#784BA0] shrink-0">{sub.value}/100</span>
                   </div>
                   <div className="h-2 overflow-hidden rounded-full bg-white/70">
                     <div

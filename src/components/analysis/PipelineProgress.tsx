@@ -28,7 +28,7 @@ export const PipelineProgress = () => {
         <div className="grid place-items-center">
           <div className="relative grid h-72 w-72 place-items-center rounded-full bg-white/50">
             <div className="absolute inset-0 animate-spin rounded-full bg-[conic-gradient(#FF3CAC,#784BA0,#2BFFFE,#FFE45E,#FF8C42,#FF3CAC)] opacity-35 blur-xl" />
-            <div className="relative grid h-48 w-48 place-items-center rounded-full border border-white/70 bg-white/60 shadow-[0_24px_70px_rgba(120,75,160,0.18)] backdrop-blur-2xl">
+            <div className="relative grid h-48 w-48 place-items-center rounded-full border border-white/70 bg-white/10 shadow-[0_24px_70px_rgba(120,75,160,0.18)] backdrop-blur-2xl">
               <CircleDashed className="h-16 w-16 animate-spin text-[#FF3CAC]" aria-hidden="true" />
               <p className="mt-4 text-center text-sm font-black uppercase text-[#784BA0]">Analyzing Image</p>
             </div>
@@ -37,7 +37,7 @@ export const PipelineProgress = () => {
 
         <div>
           <p className="text-sm font-black uppercase text-[#FF3CAC]">Visual analysis in progress</p>
-          <h3 className="mt-2 font-display text-4xl font-black leading-none text-[#171018]">Building the evidence trail</h3>
+          <h3 className="mt-2 font-display text-4xl font-black leading-none text-white">Building the evidence trail</h3>
           <div className="mt-7 space-y-4">
             {steps.map((step, index) => {
               const isComplete = index < activeStep;
@@ -57,7 +57,7 @@ export const PipelineProgress = () => {
                     </span>
                     <div className="flex-1">
                       <div className="flex items-center justify-between gap-3">
-                        <p className="font-black text-[#171018]">{step}</p>
+                        <p className="font-black text-white">{step}</p>
                         <p className="text-xs font-black uppercase text-[#6A5571]">{isComplete ? "Complete" : isActive ? "Running" : "Queued"}</p>
                       </div>
                       <div className="mt-2 h-2 overflow-hidden rounded-full bg-white/70">

@@ -22,7 +22,7 @@ export const FashionCoachCard = ({ coaching }: FashionCoachCardProps) => {
     <GlassCard className="p-6">
       <div className="mb-6">
         <p className="text-sm font-black uppercase text-[#784BA0]">Stage 9</p>
-        <h3 className="font-display text-3xl font-black text-[#171018]">Personal Fashion Coach</h3>
+        <h3 className="font-display text-3xl font-black text-white">Personal Fashion Coach</h3>
         <p className="mt-2 text-sm font-semibold leading-relaxed text-[#5F4967]">
           Every outfit represents a styling lesson. Learn the principles behind visual harmony and proportion theory applied to your look.
         </p>
@@ -34,10 +34,10 @@ export const FashionCoachCard = ({ coaching }: FashionCoachCardProps) => {
           return (
             <div key={idx} className={`rounded-2xl border ${sec.border} ${sec.bg} p-5 shadow-sm`}>
               <div className="mb-4 flex items-center gap-2">
-                <span className={`grid h-8 w-8 place-items-center rounded-lg bg-white/80 shadow-sm ${sec.color}`}>
+                <span className={`grid h-8 w-8 place-items-center rounded-lg bg-white/10 shadow-sm ${sec.color}`}>
                   <Icon className="h-4.5 w-4.5" />
                 </span>
-                <h4 className="text-sm font-black text-[#171018] uppercase tracking-wide">{sec.title}</h4>
+                <h4 className="text-sm font-black text-white uppercase tracking-wide">{sec.title}</h4>
               </div>
               <ul className="space-y-2.5">
                 {sec.data && sec.data.length > 0 ? (
