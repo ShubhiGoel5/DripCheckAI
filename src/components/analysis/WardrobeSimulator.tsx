@@ -35,7 +35,7 @@ export const WardrobeSimulator = ({ baseScore, scenarios }: WardrobeSimulatorPro
         </p>
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-[1fr_1.2fr] items-center">
+      <div className="grid gap-6 items-center">
         {/* Left Side: Score Preview */}
         <div className="flex flex-col items-center justify-center p-4 rounded-3xl border border-border bg-card text-center shadow-sm">
           <div className="relative grid h-44 w-44 place-items-center mb-2">
