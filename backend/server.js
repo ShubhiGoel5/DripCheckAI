@@ -120,22 +120,41 @@ ANALYSIS GUIDELINES:
 
 You MUST respond with a JSON object. Return only the raw JSON.`;
 
-    const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
-      contents: [
-        { 
-          role: 'user', 
-          parts: [
-            { text: systemPrompt },
-            { inlineData: { mimeType: mimeType, data: base64Data } }
-          ]
-        }
-      ],
-      config: {
-        responseMimeType: "application/json",
-        temperature: 0.1,
+    const modelsToTry = ['gemini-2.5-flash', 'gemini-1.5-flash', 'gemini-1.5-pro'];
+    let response;
+    let lastError;
+
+    for (const modelName of modelsToTry) {
+      try {
+        console.log(`Attempting to generate content with model: ${modelName}`);
+        response = await ai.models.generateContent({
+          model: modelName,
+          contents: [
+            { 
+              role: 'user', 
+              parts: [
+                { text: systemPrompt },
+                { inlineData: { mimeType: mimeType, data: base64Data } }
+              ]
+            }
+          ],
+          config: {
+            responseMimeType: "application/json",
+            temperature: 0.1,
+          }
+        });
+        
+        // If successful, break out of the loop
+        break;
+      } catch (err) {
+        console.warn(`Model ${modelName} failed:`, err.message);
+        lastError = err;
       }
-    });
+    }
+
+    if (!response) {
+      throw new Error(`All fallback models failed. Last error: ${lastError?.message}`);
+    }
 
     const textResult = response.text;
 
