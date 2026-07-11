@@ -19,16 +19,16 @@ export const RunwaySection = () => (
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.5, delay: index * 0.08 }}
-            className="group rounded-2xl border border-white/10 glass-panel p-8 shadow-lg transition-all duration-300 hover:-translate-y-2 hover:bg-white/5 hover:border-white/20 relative overflow-hidden"
+            className="group rounded-2xl border border-border bg-card/70 backdrop-blur-xl p-8 shadow-lg transition-all duration-300 hover:-translate-y-2 hover:bg-muted hover:border-border/80 relative overflow-hidden"
           >
             <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
             <div className="mb-8 flex items-center justify-between relative z-10">
-              <span className="grid h-14 w-14 place-items-center rounded-2xl bg-white/5 border border-white/10 shadow-glow backdrop-blur-md">
+              <span className="grid h-14 w-14 place-items-center rounded-2xl bg-muted border border-border shadow-sm">
                 <Icon className="h-6 w-6 text-primary" aria-hidden="true" />
               </span>
               <Sparkles className="h-5 w-5 text-accent opacity-0 transition-opacity duration-300 group-hover:opacity-100" aria-hidden="true" />
             </div>
-            <h3 className="text-2xl font-bold tracking-tight text-white relative z-10">{item.title}</h3>
+            <h3 className="text-2xl font-bold tracking-tight text-foreground relative z-10">{item.title}</h3>
             <p className="mt-3 text-base font-medium text-muted-foreground relative z-10">{item.copy}</p>
           </motion.div>
         );
