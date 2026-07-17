@@ -25,9 +25,9 @@ export const RecommendationsCard = ({ recommendations }: RecommendationsCardProp
   return (
     <GlassCard className="p-6">
       <div className="mb-6">
-        <p className="text-sm font-black uppercase text-[#FF3CAC]">Stage 7</p>
-        <h3 className="font-display text-3xl font-black text-foreground">Styling Recommendations</h3>
-        <p className="mt-2 text-sm font-semibold leading-relaxed text-[#5F4967]">
+        <p className="text-xs font-bold uppercase tracking-widest text-primary">Stage 7</p>
+        <h3 className="mt-1 text-2xl font-bold tracking-tight text-foreground">Styling Recommendations</h3>
+        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
           Categorized, actionable steps recommended by the AI stylist to upgrade your outfit's aesthetic and score.
         </p>
       </div>
@@ -40,9 +40,9 @@ export const RecommendationsCard = ({ recommendations }: RecommendationsCardProp
               <TabsTrigger
                 key={cat.value}
                 value={cat.value}
-                className="flex items-center gap-1.5 rounded-xl px-4 py-2 text-xs font-black text-[#4F3A56] transition-all data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-md"
+                className="flex items-center gap-1.5 rounded-xl px-4 py-2 text-xs font-bold text-muted-foreground transition-all data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-md"
               >
-                <Icon className="h-3.5 w-3.5" />
+                <Icon className="h-3.5 w-3.5" aria-hidden="true" />
                 {cat.label}
               </TabsTrigger>
             );
@@ -52,28 +52,28 @@ export const RecommendationsCard = ({ recommendations }: RecommendationsCardProp
         {categories.map((cat) => (
           <TabsContent key={cat.value} value={cat.value} className="focus-visible:outline-none">
             {(!cat.data || cat.data.length === 0) ? (
-              <div className="text-center py-8 text-sm font-semibold text-[#5F4967]">
+              <div className="text-center py-8 text-sm text-muted-foreground">
                 No specific recommendations in this category for this look.
               </div>
             ) : (
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                 {cat.data.map((item, idx) => (
-                  <div key={idx} className="flex flex-col justify-between rounded-2xl border border-border bg-background p-5 shadow-sm transition-all hover:bg-muted/50">
+                  <div key={idx} className="flex flex-col justify-between rounded-2xl border border-border bg-background p-5 shadow-xs transition-all hover:bg-muted/50">
                     <div>
-                      <div className="mb-4 flex items-center justify-between">
-                        <Sparkles className="h-4.5 w-4.5 text-[#FF3CAC]" aria-hidden="true" />
-                        <span className={`rounded-full px-2.5 py-0.5 text-[10px] font-black uppercase text-white ${
-                          item.priority === "High" ? "bg-[#FF3CAC]" : item.priority === "Medium" ? "bg-[#784BA0]" : "bg-[#6A5571]"
+                      <div className="mb-3 flex items-center justify-between">
+                        <Sparkles className="h-4 w-4 text-primary" aria-hidden="true" />
+                        <span className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase text-white ${
+                          item.priority === "High" ? "bg-[#FF3CAC]" : item.priority === "Medium" ? "bg-[#784BA0]" : "bg-muted-foreground"
                         }`}>
                           {item.priority} Priority
                         </span>
                       </div>
-                      <h4 className="font-display text-xl font-black text-foreground">{item.title}</h4>
-                      <p className="mt-2 text-xs font-semibold leading-relaxed text-[#5F4967]">{item.detail}</p>
+                      <h4 className="text-base font-bold text-foreground">{item.title}</h4>
+                      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{item.detail}</p>
                     </div>
-                    <div className="mt-5 flex items-center gap-1 text-xs font-black text-[#784BA0]">
+                    <div className="mt-4 flex items-center gap-1 text-xs font-bold text-primary">
                       <span>Action tip</span>
-                      <ArrowRight className="h-3.5 w-3.5" />
+                      <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
                     </div>
                   </div>
                 ))}

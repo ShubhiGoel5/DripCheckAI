@@ -74,15 +74,28 @@ export const AnalysisSection = ({ result, isLoading, imageUrl }: AnalysisSection
       {!isLoading && result && (
         <div className="grid gap-8 lg:grid-cols-[380px_1fr] xl:grid-cols-[450px_1fr] relative z-10">
           
-          {/* Left Column: Original Uploaded Image */}
+          {/* Left Column: Original Uploaded Image — desktop sticky sidebar */}
           {imageUrl && (
             <div className="space-y-6 hidden lg:block">
               <div className="sticky top-24 rounded-2xl overflow-hidden glass-panel border border-white/10 shadow-2xl relative group">
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-                <img 
-                  src={imageUrl} 
-                  alt="Uploaded fit" 
-                  className="w-full h-auto max-h-[80vh] object-contain transition-transform duration-700 group-hover:scale-105" 
+                <img
+                  src={imageUrl}
+                  alt="Uploaded fit"
+                  className="w-full h-auto max-h-[80vh] object-contain transition-transform duration-700 group-hover:scale-105"
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Mobile: compact image preview above results */}
+          {imageUrl && (
+            <div className="lg:hidden mb-2">
+              <div className="rounded-2xl overflow-hidden border border-border shadow-md">
+                <img
+                  src={imageUrl}
+                  alt="Uploaded fit"
+                  className="w-full max-h-[40vh] object-contain"
                 />
               </div>
             </div>

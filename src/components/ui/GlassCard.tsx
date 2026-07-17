@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 export const GlassCard = ({ className, children, ...props }: HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
-      "relative overflow-hidden rounded-2xl border bg-card/70 backdrop-blur-xl shadow-sm transition-all duration-300 hover:shadow-md",
+      "relative overflow-hidden rounded-2xl border border-border bg-white/85 backdrop-blur-md shadow-sm transition-all duration-300 hover:shadow-md",
       className,
     )}
     {...props}

@@ -123,11 +123,17 @@ export const ProfileOnboarding = () => {
             </div>
 
             <div>
-              <label className="mb-3 block text-sm font-medium text-foreground">Aesthetic Goals (Select 1-3)</label>
-              <div className="flex flex-wrap gap-2">
+              <div id="style-prefs-label" className="mb-3 block text-sm font-medium text-foreground">Aesthetic Goals <span className="text-muted-foreground font-normal">(Select 1–3)</span></div>
+              <div
+                className="flex flex-wrap gap-2"
+                role="group"
+                aria-labelledby="style-prefs-label"
+              >
                 {STYLES.map((style) => (
                   <button
                     key={style}
+                    type="button"
+                    aria-pressed={profile.stylePreferences.includes(style)}
                     onClick={() => toggleStylePreference(style)}
                     className={`rounded-full border px-4 py-2 text-xs font-medium transition-all duration-300 ${
                       profile.stylePreferences.includes(style)

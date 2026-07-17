@@ -108,11 +108,15 @@ export const UploadSection = ({ asset, isAnalyzing, onAssetSelect, onClear, onAn
               tabIndex={0}
               aria-label="Upload a full-body outfit image"
               className={cn(
-                "relative flex flex-col items-center justify-center min-h-[460px] cursor-pointer overflow-hidden rounded-xl border-2 border-dashed bg-black/20 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:min-h-[560px]",
+                "relative flex flex-col items-center justify-center min-h-[340px] cursor-pointer overflow-hidden rounded-xl border-2 border-dashed bg-black/20 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 sm:min-h-[460px]",
                 isDragging ? "border-primary bg-primary/5 scale-[1.01]" : "border-white/20 hover:border-white/40 hover:bg-black/30",
               )}
             >
-              <input ref={inputRef} type="file" accept="image/jpeg,image/jpg,image/png,image/webp,.jpg,.jpeg,.png,.webp" onChange={handleInput} className="sr-only" />
+              <input ref={inputRef} type="file" accept="image/jpeg,image/jpg,image/png,image/webp,.jpg,.jpeg,.png,.webp" onChange={handleInput} className="sr-only" aria-hidden="true" />
+              {/* Live region for screen readers to announce upload status */}
+              <div aria-live="polite" aria-atomic="true" className="sr-only">
+                {asset ? "Outfit image uploaded and ready for analysis" : "Upload zone is empty"}
+              </div>
 
               {asset ? (
                 <>

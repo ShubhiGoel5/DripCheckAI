@@ -40,7 +40,12 @@ export const DripScore = ({ score, confidence = "High", scoresData }: DripScoreP
       {/* Circle Gauge */}
       <div className="relative grid h-60 w-60 place-items-center">
         <div className="absolute inset-0 rounded-full bg-[conic-gradient(from_180deg,#FF3CAC,#784BA0,#2BFFFE,#FFE45E,#FF8C42,#FF3CAC)] opacity-30 blur-xl" />
-        <svg className="absolute h-full w-full -rotate-90" viewBox="0 0 200 200" aria-hidden="true">
+        <svg
+          className="absolute h-full w-full -rotate-90"
+          viewBox="0 0 200 200"
+          aria-label={`Drip score: ${score} out of 100`}
+          role="img"
+        >
           <circle cx="100" cy="100" r={radius} fill="none" stroke="rgba(255,255,255,0.6)" strokeWidth="14" />
           <motion.circle
             cx="100"
@@ -69,6 +74,9 @@ export const DripScore = ({ score, confidence = "High", scoresData }: DripScoreP
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.55, delay: 0.2 }}
           className="relative grid h-44 w-44 place-items-center rounded-full border border-white/70 bg-white/64 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.8),0_20px_50px_rgba(120,75,160,0.15)] backdrop-blur-2xl"
+          role="status"
+          aria-live="polite"
+          aria-label={`Overall drip score: ${score} out of 100, confidence: ${confidence}`}
         >
           <div>
             <p className="mb-1 flex items-center justify-center gap-1.5 text-[10px] font-black uppercase text-[#FF3CAC]">

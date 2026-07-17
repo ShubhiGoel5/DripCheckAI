@@ -111,8 +111,17 @@ const Index = () => {
           />
         )}
       </main>
-      <footer className="mx-auto max-w-7xl px-4 pb-10 pt-4 text-center text-sm font-bold text-[#6A5571] sm:px-6 lg:px-8">
-        DripCheckAI keeps the focus on fashion, confidence, and self-expression.
+      <footer className="mx-auto max-w-7xl px-4 pb-10 pt-6 sm:px-6 lg:px-8">
+        <div className="flex flex-col items-center gap-3 border-t border-border pt-6 sm:flex-row sm:justify-between">
+          <p className="text-sm font-medium text-foreground/50">
+            DripCheckAI keeps the focus on fashion, confidence, and self-expression.
+          </p>
+          <nav className="flex items-center gap-4" aria-label="Footer navigation">
+            <a href="#upload" className="text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors">Check Fit</a>
+            <a href="#profile-onboarding" className="text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors">My Profile</a>
+            <a href="#analysis" className="text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors">Analysis</a>
+          </nav>
+        </div>
       </footer>
 
       {/* Global Modals */}
