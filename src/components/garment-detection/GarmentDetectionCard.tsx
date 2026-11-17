@@ -1,88 +1,61 @@
-import { Shirt, Watch, Gem, Footprints } from "lucide-react";
-import { GlassCard } from "@/components/ui/GlassCard";
 import type { GarmentDetection } from "@/types/analysis";
 
 interface GarmentDetectionCardProps {
   garments: GarmentDetection[];
 }
 
-const getIcon = (category: GarmentDetection["category"]) => {
-  if (category === "Accessories") return Watch;
-  if (category === "Footwear") return Footprints;
-  if (category === "Jewelry") return Gem;
-  return Shirt;
+const CATEGORIES = ["Top Wear", "Bottom Wear", "Footwear", "Accessories", "Jewelry"] as const;
+
+const CATEGORY_LABEL: Record<(typeof CATEGORIES)[number], string> = {
+  "Top Wear": "Top",
+  "Bottom Wear": "Bottom",
+  Footwear: "Shoes",
+  Accessories: "Accessories",
+  Jewelry: "Jewellery",
 };
 
+// Model colour names are free text ("Cream", "Navy Blue"); only show a dot when CSS understands the name.
+const toCss = (name: string) => name.toLowerCase().replace(/\s/g, "");
+const isCssColor = (name: string) => typeof CSS !== "undefined" && CSS.supports("color", toCss(name));
+
+/** The pieces we could see, one ruled row per category. Missing categories say so. */
 export const GarmentDetectionCard = ({ garments }: GarmentDetectionCardProps) => (
-  <GlassCard className="p-6">
-    <div className="mb-5">
-      <p className="text-xs font-bold uppercase tracking-widest text-primary">Stage 1</p>
-      <h3 className="mt-1 text-2xl font-bold tracking-tight text-foreground">Fashion Component Detection</h3>
-      <p className="mt-2 text-sm leading-6 text-muted-foreground">
-        Every outfit element recognized by our computer vision engine, with extracted styling tags.
-      </p>
-    </div>
-    <div className="space-y-3">
-      {garments.length === 0 && (
-        <div className="rounded-2xl bg-muted/60 p-4 border border-border">
-          <p className="font-semibold text-foreground">No garments detected</p>
-          <p className="mt-1.5 text-sm text-muted-foreground">
-            Make sure to upload a clear full-body image.
-          </p>
-        </div>
-      )}
-      {garments.map((garment) => {
-        const Icon = getIcon(garment.category);
+  <ul className="border-t border-border">
+    {CATEGORIES.map((cat) => {
+      const g = garments.find((x) => x.category === cat);
+      return (
+        <li key={cat} className="grid gap-x-6 gap-y-2 border-b border-border py-4 sm:grid-cols-[8rem_1fr_auto] sm:items-baseline">
+          <span className="label">{CATEGORY_LABEL[cat]}</span>
 
-        return (
-          <div key={garment.id} className="rounded-2xl bg-muted/50 p-4 border border-border transition-all hover:bg-muted/70">
-            <div className="flex items-start gap-4">
-              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-[linear-gradient(135deg,#FF3CAC,#784BA0,#2BFFFE)] text-white shadow-md">
-                <Icon className="h-5 w-5" aria-hidden="true" />
-              </span>
-              <div className="min-w-0 flex-1">
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <p className="text-base font-bold text-foreground">{garment.label}</p>
-                    <span className="inline-block rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-primary">
-                      {garment.category}
-                    </span>
-                  </div>
-                  <span className="rounded-full bg-primary/10 px-2.5 py-1 text-xs font-bold text-primary shadow-sm shrink-0">
-                    {garment.confidence}% match
-                  </span>
-                </div>
-
-                {/* Attribute Badges */}
-                <div className="mt-3 flex flex-wrap gap-1.5">
-                  {garment.dominantColor && (
-                    <span className="flex items-center gap-1.5 rounded-lg bg-background px-2.5 py-1 text-xs font-semibold text-foreground shadow-xs border border-border">
-                      <span className="h-2 w-2 rounded-full border border-black/10" style={{ backgroundColor: garment.dominantColor.toLowerCase().replace(" ", "") }} />
-                      {garment.dominantColor}
+          {g ? (
+            <>
+              <div>
+                <p className="font-display text-xl leading-tight">{g.label}</p>
+                <div className="mt-2 flex flex-wrap gap-1.5">
+                  {g.dominantColor && (
+                    <span className="chip">
+                      {isCssColor(g.dominantColor) && (
+                        <span
+                          className="h-2.5 w-2.5 rounded-full border border-foreground/30"
+                          style={{ backgroundColor: toCss(g.dominantColor) }}
+                          aria-hidden="true"
+                        />
+                      )}
+                      {g.dominantColor}
                     </span>
                   )}
-                  {garment.material && (
-                    <span className="rounded-lg bg-background px-2.5 py-1 text-xs font-semibold text-muted-foreground shadow-xs border border-border">
-                      {garment.material}
-                    </span>
-                  )}
-                  {garment.pattern && (
-                    <span className="rounded-lg bg-background px-2.5 py-1 text-xs font-semibold text-muted-foreground shadow-xs border border-border">
-                      {garment.pattern}
-                    </span>
-                  )}
-                  {garment.fitType && (
-                    <span className="rounded-lg bg-background px-2.5 py-1 text-xs font-semibold text-muted-foreground shadow-xs border border-border">
-                      {garment.fitType} fit
-                    </span>
-                  )}
+                  {g.material && <span className="chip">{g.material}</span>}
+                  {g.pattern && <span className="chip">{g.pattern}</span>}
+                  {g.fitType && <span className="chip">{g.fitType} fit</span>}
                 </div>
               </div>
-            </div>
-          </div>
-        );
-      })}
-    </div>
-  </GlassCard>
+              <span className="font-mono text-xs text-muted-foreground tabular sm:text-right">{g.confidence}% sure</span>
+            </>
+          ) : (
+            <p className="text-sm italic text-muted-foreground sm:col-span-2">Not in frame</p>
+          )}
+        </li>
+      );
+    })}
+  </ul>
 );
-

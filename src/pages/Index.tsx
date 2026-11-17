@@ -1,9 +1,9 @@
 import { useCallback, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { EASE, Marquee } from "@/components/motion/primitives";
 import { AnalysisSection } from "@/components/analysis/AnalysisSection";
-import { HeroSection } from "@/components/hero/HeroSection";
 import { SiteHeader } from "@/components/layout/SiteHeader";
-import { RunwaySection } from "@/components/runway/RunwaySection";
-import { ProfileOnboarding } from "@/components/profile/ProfileOnboarding";
+import { OPEN_PROFILE_EVENT, ProfileOnboarding } from "@/components/profile/ProfileOnboarding";
 import { UploadSection } from "@/components/upload/UploadSection";
 import { OccasionSelectorDialog } from "@/components/upload/OccasionSelectorDialog";
 import { HistoryDashboard } from "@/components/history/HistoryDashboard";
@@ -12,15 +12,19 @@ import type { VisualAnalysisResult } from "@/types/analysis";
 import type { UploadedAsset } from "@/types/upload";
 import { toast } from "sonner";
 
+const TICKER = ["Score out of 100", "What's working", "What's holding it back", "Colour palette", "What to change", "What-if simulator", "Saved to your archive"];
 
 const Index = () => {
   const [uploadedAsset, setUploadedAsset] = useState<UploadedAsset | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<VisualAnalysisResult | null>(null);
+  const [occasion, setOccasion] = useState<string | null>(null);
 
-  // Layout and dialog states
   const [activeView, setActiveView] = useState<"stylist" | "history">("stylist");
   const [occasionDialogOpen, setOccasionDialogOpen] = useState(false);
+
+  const scrollToAnalysis = () =>
+    setTimeout(() => document.getElementById("analysis")?.scrollIntoView({ behavior: "smooth" }), 150);
 
   const handleAssetSelect = useCallback((asset: UploadedAsset) => {
     setUploadedAsset(asset);
@@ -32,107 +36,104 @@ const Index = () => {
     setAnalysisResult(null);
   }, []);
 
-  // Intercept analysis to ask for occasion
+  // Ask for the occasion before analysing
   const handleTriggerAnalyze = useCallback(() => {
     if (!uploadedAsset) return;
     setOccasionDialogOpen(true);
   }, [uploadedAsset]);
 
-  // Execute Gemini analysis with occasion and profile
-  const handleConfirmOccasion = useCallback(async (occasion: string) => {
-    if (!uploadedAsset) return;
+  const handleConfirmOccasion = useCallback(
+    async (chosenOccasion: string) => {
+      if (!uploadedAsset) return;
 
-    setIsAnalyzing(true);
-    try {
-      const profile = getStoredProfile();
-      const result = await analyzeOutfitWithGemini(uploadedAsset.preview, occasion, profile);
-      
-      setAnalysisResult(result);
+      setOccasion(chosenOccasion);
+      setIsAnalyzing(true);
+      scrollToAnalysis();
+      try {
+        const profile = getStoredProfile();
+        const result = await analyzeOutfitWithGemini(uploadedAsset.preview, chosenOccasion, profile);
 
-      if (result.validation?.isValid === false) {
-        toast.error(result.validation?.rejectionReason || "Outfit validation rejected. See details below.");
-      } else {
-        // Save to history on success
-        saveToAnalysisHistory(result, uploadedAsset.preview, occasion);
-        toast.success("Visual analysis complete! Outfit critique generated.");
-        
-        // Scroll down to analysis results
-        setTimeout(() => {
-          document.getElementById("analysis")?.scrollIntoView({ behavior: "smooth" });
-        }, 150);
+        setAnalysisResult(result);
+
+        if (result.validation?.isValid === false) {
+          toast.error(result.validation?.rejectionReason || "That photo couldn't be read. See details below.");
+        } else {
+          saveToAnalysisHistory(result, uploadedAsset.preview, chosenOccasion);
+          toast.success("Your read is ready.");
+          scrollToAnalysis();
+        }
+      } catch (error) {
+        toast.error((error as Error).message || "Something went wrong while analyzing the outfit.");
+      } finally {
+        setIsAnalyzing(false);
       }
-    } catch (error) {
-      toast.error((error as Error).message || "An unexpected error occurred during outfit analysis.");
-    } finally {
-      setIsAnalyzing(false);
-    }
-  }, [uploadedAsset]);
+    },
+    [uploadedAsset],
+  );
 
-  // Load a historical analysis into the main viewer
+  // Load a past analysis into the main viewer
   const handleLoadPastAnalysis = useCallback((analysis: VisualAnalysisResult, imageUrl: string) => {
-    setUploadedAsset({
-      file: new File([], "archived-look"),
-      preview: imageUrl,
-      kind: "image",
-    });
+    setUploadedAsset({ file: new File([], "archived-look"), preview: imageUrl, kind: "image" });
     setAnalysisResult(analysis);
     setActiveView("stylist");
-    
-    setTimeout(() => {
-      document.getElementById("analysis")?.scrollIntoView({ behavior: "smooth" });
-    }, 150);
+    scrollToAnalysis();
   }, []);
 
   return (
-    <div className="min-h-screen overflow-x-hidden paper-grain text-foreground">
-      <SiteHeader
-        activeView={activeView}
-        onViewChange={setActiveView}
-      />
+    <div className="min-h-screen overflow-x-clip text-foreground">
+      <SiteHeader activeView={activeView} onViewChange={setActiveView} />
       <main>
-        {activeView === "stylist" ? (
-          <>
-            <HeroSection />
-            <ProfileOnboarding />
-            <UploadSection
-              asset={uploadedAsset}
-              isAnalyzing={isAnalyzing}
-              onAssetSelect={handleAssetSelect}
-              onClear={handleClear}
-              onAnalyze={handleTriggerAnalyze}
-            />
-            <AnalysisSection result={analysisResult} isLoading={isAnalyzing} imageUrl={uploadedAsset?.preview} />
-            <RunwaySection />
-          </>
-        ) : (
-          <HistoryDashboard
-            onLoadPastAnalysis={handleLoadPastAnalysis}
-            onBackToStylist={() => setActiveView("stylist")}
-          />
-        )}
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            key={activeView}
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.3, ease: EASE }}
+          >
+            {activeView === "stylist" ? (
+              <>
+                <UploadSection
+                  asset={uploadedAsset}
+                  isAnalyzing={isAnalyzing}
+                  onAssetSelect={handleAssetSelect}
+                  onClear={handleClear}
+                  onAnalyze={handleTriggerAnalyze}
+                />
+                <div className="pb-16 lg:pb-24">
+                  <Marquee items={TICKER} />
+                </div>
+                <ProfileOnboarding />
+                <AnalysisSection
+                  result={analysisResult}
+                  isLoading={isAnalyzing}
+                  imageUrl={uploadedAsset?.preview}
+                  occasion={occasion}
+                />
+              </>
+            ) : (
+              <HistoryDashboard onLoadPastAnalysis={handleLoadPastAnalysis} onBackToStylist={() => setActiveView("stylist")} />
+            )}
+          </motion.div>
+        </AnimatePresence>
       </main>
-      <footer className="mx-auto max-w-7xl px-4 pb-10 pt-6 sm:px-6 lg:px-8">
-        <div className="flex flex-col items-center gap-3 border-t border-border pt-6 sm:flex-row sm:justify-between">
-          <p className="text-sm font-medium text-foreground/50">
-            DripCheckAI keeps the focus on fashion, confidence, and self-expression.
+
+      <footer className="page pb-10 pt-4">
+        <div className="flex flex-col gap-3 border-t border-foreground pt-5 sm:flex-row sm:items-baseline sm:justify-between">
+          <p className="font-display text-2xl leading-none">DripCheck</p>
+          <p className="max-w-md text-sm text-muted-foreground">
+            Feedback is generated by AI from a single photo. Treat it as a second opinion, not a verdict on you.
           </p>
-          <nav className="flex items-center gap-4" aria-label="Footer navigation">
-            <a href="#upload" className="text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors">Check Fit</a>
-            <a href="#profile-onboarding" className="text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors">My Profile</a>
-            <a href="#analysis" className="text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors">Analysis</a>
-          </nav>
         </div>
       </footer>
 
-      {/* Global Modals */}
       <OccasionSelectorDialog
         open={occasionDialogOpen}
         onOpenChange={setOccasionDialogOpen}
         onConfirm={handleConfirmOccasion}
         onOpenProfile={() => {
           setOccasionDialogOpen(false);
-          // TODO: scroll to static profile onboarding section
-          document.getElementById("profile-onboarding")?.scrollIntoView({ behavior: "smooth" });
+          setTimeout(() => window.dispatchEvent(new Event(OPEN_PROFILE_EVENT)), 120);
         }}
       />
     </div>
@@ -140,4 +141,3 @@ const Index = () => {
 };
 
 export default Index;
-

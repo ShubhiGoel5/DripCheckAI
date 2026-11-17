@@ -15,30 +15,10 @@ export default {
   	},
   	extend: {
   		fontFamily: {
-  			sans: [
-  				'"Plus Jakarta Sans"',
-  				'Inter',
-  				'ui-sans-serif',
-  				'system-ui',
-  				'-apple-system',
-  				'sans-serif'
-  			],
-  			display: [
-  				'"Inter"',
-  				'ui-sans-serif',
-  				'system-ui',
-  				'sans-serif'
-  			],
-  			serif: [
-  				'Merriweather',
-  				'ui-serif',
-  				'serif'
-  			],
-  			mono: [
-  				'JetBrains Mono',
-  				'ui-monospace',
-  				'monospace'
-  			]
+  			sans: ['"Hanken Grotesk"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+  			display: ['"Instrument Serif"', 'ui-serif', 'Georgia', 'serif'],
+  			serif: ['"Instrument Serif"', 'ui-serif', 'Georgia', 'serif'],
+  			mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace']
   		},
   		colors: {
   			border: 'hsl(var(--border))',
@@ -46,6 +26,10 @@ export default {
   			ring: 'hsl(var(--ring))',
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
+  			signal: {
+  				DEFAULT: 'hsl(var(--signal))',
+  				foreground: 'hsl(var(--signal-foreground))'
+  			},
   			primary: {
   				DEFAULT: 'hsl(var(--primary))',
   				foreground: 'hsl(var(--primary-foreground))'
@@ -155,10 +139,7 @@ export default {
   			md: 'var(--shadow-md)',
   			lg: 'var(--shadow-lg)',
   			xl: 'var(--shadow-xl)',
-  			'2xl': 'var(--shadow-2xl)',
-  			'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
-  			'glass-sm': '0 4px 16px 0 rgba(0, 0, 0, 0.2)',
-  			'glow': '0 0 20px 0 hsl(var(--primary) / 0.4)',
+  			'2xl': 'var(--shadow-2xl)'
   		}
   	}
   },
