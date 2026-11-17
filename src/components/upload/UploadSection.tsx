@@ -1,7 +1,7 @@
 import { useCallback, useRef, useState } from "react";
-import { motion } from "framer-motion";
-import { ArrowRight, Camera, ImagePlus, Loader2, Sparkles, Upload, X, AlertCircle, Footprints } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ArrowRight, Loader2 } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+import { EASE } from "@/components/motion/primitives";
 import { cn } from "@/lib/utils";
 import type { UploadedAsset } from "@/types/upload";
 import { toast } from "sonner";
@@ -37,162 +37,238 @@ const readAsset = (file: File, onAssetSelect: (asset: UploadedAsset) => void) =>
   reader.readAsDataURL(file);
 };
 
+const STEPS = [
+  ["01", "Upload a full-length photo"],
+  ["02", "Say where you're going"],
+  ["03", "Get the read"],
+] as const;
+
+/** Corner crop marks. They grow when the parent (a `group`) is hovered or dragged over. */
+const Marks = ({ active }: { active?: boolean }) => (
+  <>
+    {["left-0 top-0 border-l border-t", "right-0 top-0 border-r border-t", "left-0 bottom-0 border-l border-b", "right-0 bottom-0 border-r border-b"].map((c) => (
+      <span
+        key={c}
+        aria-hidden="true"
+        className={cn(
+          "pointer-events-none absolute border-foreground transition-all duration-300 ease-out",
+          active ? "h-10 w-10 border-signal" : "h-5 w-5 group-hover:h-8 group-hover:w-8",
+          c,
+        )}
+      />
+    ))}
+  </>
+);
+
 export const UploadSection = ({ asset, isAnalyzing, onAssetSelect, onClear, onAnalyze }: UploadSectionProps) => {
   const [isDragging, setIsDragging] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const openFilePicker = useCallback(() => inputRef.current?.click(), []);
 
-  const handleDrop = useCallback((event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    setIsDragging(false);
-    const file = event.dataTransfer.files[0];
-    if (file) readAsset(file, onAssetSelect);
-  }, [onAssetSelect]);
-
-  const handleInput = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) readAsset(file, onAssetSelect);
-    event.target.value = "";
-  }, [onAssetSelect]);
-
-  const handleKeyDown = useCallback((event: React.KeyboardEvent<HTMLDivElement>) => {
-    if (event.key === "Enter" || event.key === " ") {
+  const handleDrop = useCallback(
+    (event: React.DragEvent<HTMLElement>) => {
       event.preventDefault();
-      openFilePicker();
-    }
-  }, [openFilePicker]);
+      setIsDragging(false);
+      const file = event.dataTransfer.files[0];
+      if (file) readAsset(file, onAssetSelect);
+    },
+    [onAssetSelect],
+  );
+
+  const handleInput = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files?.[0];
+      if (file) readAsset(file, onAssetSelect);
+      event.target.value = "";
+    },
+    [onAssetSelect],
+  );
+
+  const dragProps = {
+    onDragOver: (e: React.DragEvent) => {
+      e.preventDefault();
+      setIsDragging(true);
+    },
+    onDragLeave: (e: React.DragEvent) => {
+      e.preventDefault();
+      setIsDragging(false);
+    },
+    onDrop: handleDrop,
+  };
 
   return (
-    <section id="upload" className="mx-auto w-full max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-20 relative">
-      <div className="absolute top-1/2 right-0 w-96 h-96 bg-accent/10 rounded-full blur-[100px] -z-10 pointer-events-none" />
-      <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6 }}
-        >
-          <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-primary">Input Layer</p>
-          <h2 className="text-[clamp(3rem,6vw,4.5rem)] font-extrabold leading-[1.05] tracking-tight text-foreground">
-            Drop the fit.
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent mt-2">
-            See the pipeline.
+    <section id="upload" aria-labelledby="hero-heading" className="page grid gap-10 pb-16 pt-10 md:pt-16 lg:grid-cols-12 lg:gap-12 lg:pb-24">
+      {/* Copy */}
+      <div className="lg:col-span-6 lg:pt-6 xl:col-span-4">
+        <p className="label animate-rise">AI outfit critique</p>
+        <h1 id="hero-heading" className="display mt-5 text-[clamp(2.75rem,5.6vw,5rem)]">
+          {[
+            <span key="a">Is the fit</span>,
+            <em key="b" className="text-signal">
+              working?
+            </em>,
+          ].map((line, i) => (
+            // Each line slides up from behind a mask; padding keeps descenders from clipping.
+            <span key={i} className="block overflow-hidden pb-[0.12em] -mb-[0.12em]">
+              <motion.span
+                className="block"
+                initial={{ y: "110%", rotate: 2 }}
+                animate={{ y: 0, rotate: 0 }}
+                transition={{ duration: 0.95, delay: 0.1 + i * 0.14, ease: EASE }}
+              >
+                {line}
+              </motion.span>
             </span>
-          </h2>
-          <p className="mt-6 max-w-xl text-lg font-medium leading-relaxed text-muted-foreground">
-            The upload starts a visible computer vision flow, from garment detection to score reasoning. High-fidelity analysis requires a clear, full-body shot.
-          </p>
-        </motion.div>
+          ))}
+        </h1>
+        <p className="animate-rise mt-8 max-w-md text-base leading-snug text-foreground/80" style={{ animationDelay: "140ms" }}>
+          Upload one full-body photo. You get a score out of 100, what's carrying the look, what's letting it down, and
+          the changes that would move the number.
+        </p>
 
-        <motion.div
-          initial={{ opacity: 0, y: 28 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.65, delay: 0.12 }}
-        >
-          <div className="rounded-2xl glass-panel p-2 sm:p-3 relative overflow-hidden group">
+        <ol className="mt-10 max-w-md border-t border-border">
+          {STEPS.map(([n, text], i) => (
+            <motion.li
+              key={n}
+              className="group flex items-baseline gap-5 border-b border-border py-3"
+              initial={{ opacity: 0, x: -16 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.55 + i * 0.1, ease: EASE }}
+            >
+              <span className="label w-6 text-signal">{n}</span>
+              <span className="text-[15px] font-medium transition-transform duration-300 group-hover:translate-x-1.5">{text}</span>
+            </motion.li>
+          ))}
+        </ol>
+      </div>
+
+      {/* Editorial photo — wide screens only, so the upload stays first on phones */}
+      <motion.figure
+        className="hidden xl:col-span-3 xl:mt-24 xl:block"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.4, delay: 0.3 }}
+      >
+        <div className="aspect-[3/4] overflow-hidden bg-muted">
+          <motion.img
+            src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=900&q=80"
+            alt="A woman in a tailored outfit, photographed full length"
+            className="h-full w-full object-cover"
+            initial={{ clipPath: "inset(100% 0 0 0)", scale: 1.12 }}
+            animate={{ clipPath: "inset(0% 0 0 0)", scale: 1 }}
+            transition={{ duration: 1.2, delay: 0.35, ease: EASE }}
+          />
+        </div>
+        <figcaption className="label mt-3 flex justify-between">
+          <span>Fig. 1</span>
+          <span>Full length</span>
+        </figcaption>
+      </motion.figure>
+
+      {/* Plate */}
+      <div className="animate-rise lg:col-span-6 xl:col-span-5" style={{ animationDelay: "120ms" }}>
+        <input
+          ref={inputRef}
+          type="file"
+          accept="image/jpeg,image/jpg,image/png,image/webp,.jpg,.jpeg,.png,.webp"
+          onChange={handleInput}
+          className="sr-only"
+          tabIndex={-1}
+          aria-hidden="true"
+        />
+        <div aria-live="polite" className="sr-only">
+          {asset ? "Outfit photo added and ready to analyze" : "No photo added yet"}
+        </div>
+
+        {asset ? (
+          <figure>
             <div
-              onDragOver={(event) => {
-                event.preventDefault();
-                setIsDragging(true);
-              }}
-              onDragLeave={(event) => {
-                event.preventDefault();
-                setIsDragging(false);
-              }}
-              onDrop={handleDrop}
-              onClick={openFilePicker}
-              onKeyDown={handleKeyDown}
-              role="button"
-              tabIndex={0}
-              aria-label="Upload a full-body outfit image"
+              {...dragProps}
               className={cn(
-                "relative flex flex-col items-center justify-center min-h-[340px] cursor-pointer overflow-hidden rounded-xl border-2 border-dashed bg-black/20 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 sm:min-h-[460px]",
-                isDragging ? "border-primary bg-primary/5 scale-[1.01]" : "border-white/20 hover:border-white/40 hover:bg-black/30",
+                "relative flex aspect-[4/5] max-h-[78vh] w-full items-center justify-center bg-muted p-3 transition-colors sm:p-5",
+                isDragging && "bg-signal/10",
               )}
             >
-              <input ref={inputRef} type="file" accept="image/jpeg,image/jpg,image/png,image/webp,.jpg,.jpeg,.png,.webp" onChange={handleInput} className="sr-only" aria-hidden="true" />
-              {/* Live region for screen readers to announce upload status */}
-              <div aria-live="polite" aria-atomic="true" className="sr-only">
-                {asset ? "Outfit image uploaded and ready for analysis" : "Upload zone is empty"}
-              </div>
-
-              {asset ? (
-                <>
-                  <img src={asset.preview} alt="Uploaded outfit preview" className="absolute inset-0 h-full w-full object-contain transition-transform duration-500 group-hover:scale-[1.03]" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                  
-                  <button
-                    type="button"
-                    onClick={(event) => {
-                      event.stopPropagation();
-                      onClear();
-                    }}
-                    className="absolute right-4 top-4 grid h-10 w-10 place-items-center rounded-full bg-white/10 backdrop-blur-md text-white transition-all hover:bg-red-500 hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
-                    aria-label="Remove image"
-                  >
-                    <X className="h-5 w-5" aria-hidden="true" />
-                  </button>
-                  
-                  <div className="absolute bottom-4 left-4 right-4 sm:bottom-6 sm:left-6 sm:right-6">
-                    <div className="rounded-xl glass-panel p-4 sm:p-6 backdrop-blur-xl bg-white/10">
-                      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                        <div>
-                          <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-primary">
-                            <Sparkles className="h-4 w-4" aria-hidden="true" />
-                            Ready for the read
-                          </p>
-                          <p className="mt-1 text-xl font-bold text-white">
-                            Your look is locked in.
-                          </p>
-                        </div>
-                        <Button
-                          type="button"
-                          onClick={(event) => {
-                            event.stopPropagation();
-                            onAnalyze();
-                          }}
-                          disabled={isAnalyzing}
-                          className="bg-primary text-white hover:bg-primary/90 hover:scale-105 shadow-glow transition-all rounded-full px-6"
-                        >
-                          {isAnalyzing ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <ArrowRight className="mr-2 h-5 w-5" />}
-                          {isAnalyzing ? "Analyzing Pipeline..." : "Run Analysis"}
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center z-10">
+              <Marks active={isDragging} />
+              <motion.img
+                key={asset.preview.slice(-24)}
+                src={asset.preview}
+                alt="Your uploaded outfit"
+                className="h-full w-full object-contain"
+                initial={{ clipPath: "inset(0 0 100% 0)", scale: 1.04 }}
+                animate={{ clipPath: "inset(0 0 0% 0)", scale: 1 }}
+                transition={{ duration: 0.9, ease: EASE }}
+              />
+              {/* Scan line while the model is reading the photo */}
+              <AnimatePresence>
+                {isAnalyzing && (
                   <motion.div
-                    animate={{ y: [0, -8, 0] }}
-                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                    className="mb-8 grid h-24 w-24 place-items-center rounded-full bg-white/5 border border-white/10 shadow-lg backdrop-blur-md"
+                    className="pointer-events-none absolute inset-3 overflow-hidden sm:inset-5"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    aria-hidden="true"
                   >
-                    {isDragging ? <ImagePlus className="h-10 w-10 text-primary" /> : <Upload className="h-10 w-10 text-muted-foreground group-hover:text-primary transition-colors" />}
+                    <div className="animate-scan absolute inset-x-0 h-24 -translate-y-full bg-signal/10 after:absolute after:inset-x-0 after:bottom-0 after:h-[2px] after:bg-signal" />
                   </motion.div>
-                  <h3 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
-                    {isDragging ? "Release the look" : "Upload your outfit"}
-                  </h3>
-                  <p className="mt-4 max-w-sm text-base text-muted-foreground">
-                    Drag a full-body photo here or tap to browse. JPG, PNG, and WebP up to 10MB.
-                  </p>
-                  <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-                    <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-medium text-muted-foreground backdrop-blur-md">
-                      <Camera className="h-3.5 w-3.5 text-accent" aria-hidden="true" />
-                      Full-body shot
-                    </span>
-                    <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-medium text-muted-foreground backdrop-blur-md">
-                      <AlertCircle className="h-3.5 w-3.5 text-accent" aria-hidden="true" />
-                      Max 10MB
-                    </span>
-                  </div>
-                </div>
-              )}
+                )}
+              </AnimatePresence>
             </div>
+            <figcaption className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex gap-5 text-sm">
+                <button type="button" onClick={openFilePicker} className="link font-medium">
+                  Replace photo
+                </button>
+                <button type="button" onClick={onClear} className="link font-medium">
+                  Remove
+                </button>
+              </div>
+              <button type="button" onClick={onAnalyze} disabled={isAnalyzing} className="btn-solid sm:min-w-[220px]">
+                {isAnalyzing ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" /> : null}
+                {isAnalyzing ? "Reading…" : "Get the read"}
+                {!isAnalyzing && <ArrowRight className="h-4 w-4" aria-hidden="true" />}
+              </button>
+            </figcaption>
+          </figure>
+        ) : (
+          <div
+            {...dragProps}
+            onClick={openFilePicker}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                openFilePicker();
+              }
+            }}
+            role="button"
+            tabIndex={0}
+            aria-label="Upload a full-body outfit photo"
+            className={cn(
+              "hatch group relative flex aspect-[4/5] max-h-[78vh] w-full cursor-pointer flex-col items-center justify-center p-8 text-center transition-all duration-300",
+              isDragging ? "scale-[1.015] bg-signal/10" : "bg-muted/50 hover:bg-muted",
+            )}
+          >
+            <Marks active={isDragging} />
+            <p className="label">{isDragging ? "Release to add" : "Drop a photo here"}</p>
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.p
+                key={isDragging ? "drag" : "idle"}
+                className="display mt-4 text-3xl sm:text-4xl"
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -16 }}
+                transition={{ duration: 0.22, ease: EASE }}
+              >
+                {isDragging ? "Let go." : "Show us the fit."}
+              </motion.p>
+            </AnimatePresence>
+            <span className="btn-solid pointer-events-none mt-8">Choose a file</span>
+            <p className="mt-6 max-w-xs text-sm text-muted-foreground">
+              Head to toe works best. JPG, PNG or WebP, up to 10&nbsp;MB.
+            </p>
           </div>
-        </motion.div>
+        )}
       </div>
     </section>
   );

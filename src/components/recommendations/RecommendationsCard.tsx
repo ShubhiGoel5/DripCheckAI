@@ -1,5 +1,5 @@
-import { ArrowRight, Sparkles, Zap, Palette, Watch, Layers, TrendingUp } from "lucide-react";
-import { GlassCard } from "@/components/ui/GlassCard";
+import { motion } from "framer-motion";
+import { EASE } from "@/components/motion/primitives";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { Recommendation } from "@/types/analysis";
 
@@ -14,75 +14,62 @@ interface RecommendationsCardProps {
 }
 
 export const RecommendationsCard = ({ recommendations }: RecommendationsCardProps) => {
-  const categories = [
-    { value: "immediate", label: "Immediate Tweaks", icon: Zap, data: recommendations.immediate },
-    { value: "colors", label: "Color Science", icon: Palette, data: recommendations.colors },
-    { value: "accessories", label: "Accessories", icon: Watch, data: recommendations.accessories },
-    { value: "styling", label: "Styling & Proportions", icon: Layers, data: recommendations.styling },
-    { value: "trends", label: "Trend Ideas", icon: TrendingUp, data: recommendations.trends },
+  const all = [
+    { value: "immediate", label: "Do first", data: recommendations.immediate },
+    { value: "colors", label: "Colour", data: recommendations.colors },
+    { value: "accessories", label: "Accessories", data: recommendations.accessories },
+    { value: "styling", label: "Fit & proportion", data: recommendations.styling },
+    { value: "trends", label: "Trends", data: recommendations.trends },
   ];
+  // Hide empty tabs; if everything is empty keep one so the empty message shows.
+  const populated = all.filter((c) => c.data && c.data.length > 0);
+  const categories = populated.length > 0 ? populated : all.slice(0, 1);
 
   return (
-    <GlassCard className="p-6">
-      <div className="mb-6">
-        <p className="text-xs font-bold uppercase tracking-widest text-primary">Stage 7</p>
-        <h3 className="mt-1 text-2xl font-bold tracking-tight text-foreground">Styling Recommendations</h3>
-        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-          Categorized, actionable steps recommended by the AI stylist to upgrade your outfit's aesthetic and score.
-        </p>
-      </div>
-
-      <Tabs defaultValue="immediate" className="w-full">
-        <TabsList className="flex flex-wrap h-auto gap-2 bg-muted p-2 rounded-2xl border border-border shadow-inner mb-6">
-          {categories.map((cat) => {
-            const Icon = cat.icon;
-            return (
-              <TabsTrigger
-                key={cat.value}
-                value={cat.value}
-                className="flex items-center gap-1.5 rounded-xl px-4 py-2 text-xs font-bold text-muted-foreground transition-all data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-md"
-              >
-                <Icon className="h-3.5 w-3.5" aria-hidden="true" />
-                {cat.label}
-              </TabsTrigger>
-            );
-          })}
-        </TabsList>
-
+    <Tabs defaultValue={categories[0].value} className="w-full">
+      <TabsList className="mb-2 h-auto w-full flex-wrap justify-start gap-x-6 gap-y-1 rounded-none border-b border-border bg-transparent p-0">
         {categories.map((cat) => (
-          <TabsContent key={cat.value} value={cat.value} className="focus-visible:outline-none">
-            {(!cat.data || cat.data.length === 0) ? (
-              <div className="text-center py-8 text-sm text-muted-foreground">
-                No specific recommendations in this category for this look.
-              </div>
-            ) : (
-              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                {cat.data.map((item, idx) => (
-                  <div key={idx} className="flex flex-col justify-between rounded-2xl border border-border bg-background p-5 shadow-xs transition-all hover:bg-muted/50">
-                    <div>
-                      <div className="mb-3 flex items-center justify-between">
-                        <Sparkles className="h-4 w-4 text-primary" aria-hidden="true" />
-                        <span className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase text-white ${
-                          item.priority === "High" ? "bg-[#FF3CAC]" : item.priority === "Medium" ? "bg-[#784BA0]" : "bg-muted-foreground"
-                        }`}>
-                          {item.priority} Priority
-                        </span>
-                      </div>
-                      <h4 className="text-base font-bold text-foreground">{item.title}</h4>
-                      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{item.detail}</p>
-                    </div>
-                    <div className="mt-4 flex items-center gap-1 text-xs font-bold text-primary">
-                      <span>Action tip</span>
-                      <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </TabsContent>
+          <TabsTrigger
+            key={cat.value}
+            value={cat.value}
+            className="-mb-px rounded-none border-b-2 border-transparent bg-transparent px-0 py-3 text-sm font-semibold text-muted-foreground shadow-none transition-colors hover:text-foreground data-[state=active]:border-signal data-[state=active]:bg-transparent data-[state=active]:text-foreground data-[state=active]:shadow-none"
+          >
+            {cat.label}
+            <span className="ml-1.5 font-mono text-[10px] text-muted-foreground">{cat.data?.length ?? 0}</span>
+          </TabsTrigger>
         ))}
-      </Tabs>
-    </GlassCard>
+      </TabsList>
+
+      {categories.map((cat) => (
+        <TabsContent key={cat.value} value={cat.value} className="mt-0 focus-visible:outline-none">
+          {!cat.data || cat.data.length === 0 ? (
+            <p className="py-8 text-sm text-muted-foreground">Nothing to add in this category for this look.</p>
+          ) : (
+            <ol className="divide-y divide-border">
+              {cat.data.map((item, idx) => (
+                <motion.li
+                  key={idx}
+                  className="group grid gap-x-6 gap-y-1 py-5 sm:grid-cols-[2.5rem_1fr_auto]"
+                  initial={{ opacity: 0, x: -14 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: idx * 0.08, ease: EASE }}
+                >
+                  <span className="font-mono text-xs text-muted-foreground sm:pt-2">{String(idx + 1).padStart(2, "0")}</span>
+                  <div className="transition-transform duration-300 group-hover:translate-x-1.5">
+                    <h4 className="font-display text-xl leading-tight">{item.title}</h4>
+                    <p className="mt-1.5 max-w-xl text-sm leading-relaxed text-muted-foreground">{item.detail}</p>
+                  </div>
+                  <span
+                    className={`label self-start sm:pt-2 ${item.priority === "High" ? "text-signal" : ""}`}
+                  >
+                    {item.priority}
+                  </span>
+                </motion.li>
+              ))}
+            </ol>
+          )}
+        </TabsContent>
+      ))}
+    </Tabs>
   );
 };
-

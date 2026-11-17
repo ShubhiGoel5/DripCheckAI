@@ -1,36 +1,36 @@
-import { Sparkles } from "lucide-react";
-import { GlassCard } from "@/components/ui/GlassCard";
 import type { StyleClassification } from "@/types/analysis";
+import { ScoreBar } from "@/components/ui/ScoreBar";
 
 interface StyleClassificationCardProps {
   styles: StyleClassification[];
 }
 
-export const StyleClassificationCard = ({ styles }: StyleClassificationCardProps) => (
-  <GlassCard className="p-6">
-    <div className="mb-5 flex items-start justify-between gap-4">
-      <div>
-        <p className="text-xs font-semibold uppercase tracking-widest text-primary">Stage 3</p>
-        <h3 className="text-xl font-bold tracking-tight text-foreground mt-1">Aesthetic Archetypes</h3>
-        <p className="mt-2 text-sm font-medium text-muted-foreground">
-          Prediction confidence percentages for various styling categories detected in this look.
-        </p>
-      </div>
-      <Sparkles className="h-6 w-6 text-primary" aria-hidden="true" />
-    </div>
-    <div className="space-y-5">
-      {styles.map((style) => (
-        <div key={style.label}>
-          <div className="mb-2 flex items-center justify-between mt-3">
-            <p className="font-semibold text-sm text-foreground">{style.label}</p>
-            <p className="font-medium text-xs text-muted-foreground">{style.probability}% match</p>
-          </div>
-          <div className="h-2 overflow-hidden rounded-full bg-white/10">
-            <div className="h-full rounded-full bg-primary transition-all duration-1000 shadow-glow" style={{ width: `${style.probability}%` }} />
-          </div>
-        </div>
-      ))}
-    </div>
-  </GlassCard>
-);
+/** Aesthetic matches, strongest first. The leading one is set large. */
+export const StyleClassificationCard = ({ styles }: StyleClassificationCardProps) => {
+  const sorted = [...styles].sort((a, b) => b.probability - a.probability);
+  const [lead, ...rest] = sorted;
 
+  if (!lead) return <p className="text-sm text-muted-foreground">No clear aesthetic came through.</p>;
+
+  return (
+    <div className="grid gap-8 md:grid-cols-[1fr_1.2fr] md:gap-12">
+      <div>
+        <p className="label">Reads as</p>
+        <p className="display mt-2 text-4xl sm:text-5xl">{lead.label}</p>
+        <p className="label mt-3 text-signal">{lead.probability}% match</p>
+      </div>
+
+      <ul className="space-y-5">
+        {rest.map((s) => (
+          <li key={s.label}>
+            <div className="flex items-baseline justify-between gap-4">
+              <span className="text-[15px] font-semibold">{s.label}</span>
+              <span className="font-mono text-xs tabular text-muted-foreground">{s.probability}%</span>
+            </div>
+            <ScoreBar value={s.probability} className="mt-2" />
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};

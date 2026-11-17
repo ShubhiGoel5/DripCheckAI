@@ -1,208 +1,195 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/*
+  DripCheck — editorial system
+  Paper + ink, one red signal colour. No gradients, no glass, no glow.
+*/
+
 @layer base {
-  :root, .dark {
-    --background: 0 0% 98%; /* #fafafa */
-    --foreground: 240 10% 8%; /* darkened for better contrast */
+  :root {
+    --background: 41 33% 94%;          /* paper   #F4F0E8 */
+    --foreground: 24 16% 8%;           /* ink     #17120F */
 
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 8%;
+    --card: 42 40% 97%;
+    --card-foreground: 24 16% 8%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 8%;
+    --popover: 42 40% 97%;
+    --popover-foreground: 24 16% 8%;
 
-    --primary: 285 76% 59%; /* #bd45e6 */
-    --primary-foreground: 0 0% 100%;
+    --primary: 24 16% 8%;              /* buttons are ink */
+    --primary-foreground: 41 33% 94%;
 
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
+    --secondary: 40 22% 89%;
+    --secondary-foreground: 24 16% 8%;
 
-    --muted: 240 4.8% 95.9%;
-    /* Raised from 46.1% → 35% lightness: now 4.6:1 contrast ratio on white (WCAG AA) */
-    --muted-foreground: 240 5% 35%;
+    --muted: 40 22% 89%;
+    --muted-foreground: 28 8% 36%;
 
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
+    --accent: 40 22% 89%;
+    --accent-foreground: 24 16% 8%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
+    --signal: 12 84% 47%;              /* vermilion #DC3A12 */
+    --signal-foreground: 41 33% 96%;
 
-    --border: 240 5.9% 85%;
-    --input: 240 5.9% 85%;
-    --ring: 285 76% 59%;
+    --destructive: 12 84% 47%;
+    --destructive-foreground: 41 33% 96%;
 
-    --radius: 0.75rem;
+    --border: 30 14% 76%;
+    --input: 30 14% 70%;
+    --ring: 12 84% 47%;
 
-    --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    --font-serif: Georgia, Cambria, 'Times New Roman', Times, serif;
-    --font-mono: 'SFMono-Regular', Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+    --radius: 0.125rem;
 
-    /* Shadow tokens (previously undefined, causing invisible shadows) */
-    --shadow-2xs: 0 1px 2px 0 rgb(0 0 0 / 0.04);
-    --shadow-xs:  0 1px 3px 0 rgb(0 0 0 / 0.07), 0 1px 2px -1px rgb(0 0 0 / 0.04);
-    --shadow-sm:  0 2px 6px -1px rgb(0 0 0 / 0.08), 0 1px 2px -2px rgb(0 0 0 / 0.04);
-    --shadow-md:  0 4px 12px -2px rgb(0 0 0 / 0.10), 0 2px 4px -2px rgb(0 0 0 / 0.06);
-    --shadow-lg:  0 10px 24px -3px rgb(0 0 0 / 0.12), 0 4px 8px -4px rgb(0 0 0 / 0.06);
-    --shadow-xl:  0 20px 48px -8px rgb(0 0 0 / 0.14), 0 8px 16px -6px rgb(0 0 0 / 0.08);
-    --shadow-2xl: 0 40px 80px -12px rgb(0 0 0 / 0.18);
+    --shadow-2xs: none;
+    --shadow-xs: none;
+    --shadow-sm: none;
+    --shadow-md: 0 1px 0 hsl(var(--foreground) / 0.12);
+    --shadow-lg: 0 12px 32px -12px hsl(var(--foreground) / 0.25);
+    --shadow-xl: 0 20px 48px -16px hsl(var(--foreground) / 0.3);
+    --shadow-2xl: 0 30px 70px -20px hsl(var(--foreground) / 0.35);
   }
-}
 
-@layer base {
   * {
     @apply border-border;
   }
 
-  body {
-    @apply bg-background text-foreground antialiased;
-    font-feature-settings: "rlig" 1, "calt" 1;
-    min-width: 320px;
-    background: radial-gradient(circle at 50% -20%, hsl(285 76% 59% / 0.08), transparent 50%),
-                hsl(var(--background));
-  }
-
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 4.5rem;
+  }
+
+  body {
+    @apply bg-background font-sans text-foreground antialiased;
+    min-width: 320px;
+    font-size: 16px;
+    line-height: 1.55;
+    font-feature-settings: "ss01" 1, "kern" 1;
+  }
+
+  ::selection {
+    background: hsl(var(--signal));
+    color: hsl(var(--signal-foreground));
+  }
+
+  :focus-visible {
+    outline: 2px solid hsl(var(--signal));
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }
 
-@layer utilities {
-  .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent;
+@layer components {
+  /* Small mono caption used for every label / kicker */
+  .label {
+    @apply font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground;
   }
 
-  .border-gradient {
-    position: relative;
-    background-clip: padding-box;
-    border: 1px solid transparent;
+  /* Display headline */
+  .display {
+    @apply font-display font-normal tracking-[-0.02em];
+    line-height: 0.95;
   }
 
-  .border-gradient::before {
-    content: '';
+  /* Buttons */
+  .btn {
+    @apply relative isolate inline-flex min-h-[48px] items-center justify-center gap-3 overflow-hidden border border-foreground px-6 font-sans text-sm font-semibold tracking-wide transition-[color,border-color,transform] duration-200 active:translate-y-px disabled:pointer-events-none disabled:opacity-50;
+  }
+  /* Colour wipes up from the bottom on hover */
+  .btn::before {
+    content: "";
     position: absolute;
-    top: 0; right: 0; bottom: 0; left: 0;
+    inset: 0;
     z-index: -1;
-    margin: -1px;
-    border-radius: inherit;
-    background: linear-gradient(to right, hsl(var(--primary)), hsl(var(--accent)));
+    transform: translateY(101%);
+    transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .btn:hover::before,
+  .btn:focus-visible::before {
+    transform: translateY(0);
+  }
+  .btn svg {
+    transition: transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .btn:hover svg {
+    transform: translateX(4px);
+  }
+  .btn-solid {
+    @apply btn bg-foreground text-background hover:border-signal;
+  }
+  .btn-solid::before {
+    background: hsl(var(--signal));
+  }
+  .btn-line {
+    @apply btn bg-transparent text-foreground hover:text-background;
+  }
+  .btn-line::before {
+    background: hsl(var(--foreground));
   }
 
-  /* Glassmorphism — raised to white/80 so text inside is legible on the light page background */
-  .glass-panel {
-    @apply bg-white/80 backdrop-blur-xl border border-white/60 shadow-glass;
+  /* Underlined text link */
+  .link {
+    @apply underline decoration-foreground/30 underline-offset-4 transition-colors hover:decoration-signal hover:text-signal;
   }
 
-  /* Hover Effects */
-  .hover-scale {
-    @apply transition-all duration-300 hover:scale-[1.02] hover:shadow-glow;
+  /* Hairline-ruled chip */
+  .chip {
+    @apply inline-flex items-center gap-1.5 border border-border px-2.5 py-1 font-mono text-[11px] uppercase tracking-wider text-foreground;
   }
 
-  /* Consistent CTA button min-height for touch targets (WCAG 2.5.5: 44px minimum) */
-  .btn-primary {
-    @apply inline-flex h-11 min-w-[44px] items-center justify-center gap-2 rounded-full bg-primary px-6 text-sm font-semibold text-white shadow-glow transition-all duration-300 hover:bg-primary/90 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  /* Page container */
+  .page {
+    @apply mx-auto w-full max-w-[1280px] px-5 sm:px-8;
   }
 
-  .btn-secondary {
-    @apply inline-flex h-11 min-w-[44px] items-center justify-center gap-2 rounded-full border border-border bg-transparent px-6 text-sm font-semibold text-foreground transition-all duration-300 hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background;
-  }
-}
-
-/* Keyframe Animations */
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-@keyframes pulse-glow {
-  0%, 100% {
-    opacity: 1;
-    box-shadow: 0 0 20px hsl(var(--primary) / 0.2);
-  }
-  50% {
-    opacity: 0.8;
-    box-shadow: 0 0 40px hsl(var(--primary) / 0.6);
-  }
-}
-
-@keyframes gradient-shift {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
+  /* Diagonal hatch used for empty "plates" */
+  .hatch {
+    background-image: repeating-linear-gradient(
+      -45deg,
+      transparent 0 9px,
+      hsl(var(--foreground) / 0.06) 9px 10px
+    );
   }
 }
 
 @layer utilities {
-  .animate-float {
-    animation: float 6s ease-in-out infinite;
-  }
-
-  .animate-pulse-glow {
-    animation: pulse-glow 3s ease-in-out infinite;
-  }
-
-  .animate-gradient {
-    animation: gradient-shift 4s ease infinite;
-    background-size: 300% 100%;
-  }
-
-  .animate-fade-in {
-    animation: fade-in 0.5s ease-out forwards;
-  }
-
-  .animate-slide-up {
-    animation: slide-up 0.6s ease-out forwards;
-  }
-
-  .animate-scale-in {
-    animation: scale-in 0.3s ease-out forwards;
-  }
-
-  .animate-enter {
-    animation: fade-in 0.3s ease-out, scale-in 0.2s ease-out;
-  }
+  .tabular { font-variant-numeric: tabular-nums; }
 }
 
-@keyframes fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(15px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes bar-grow {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+@keyframes tick {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.25; }
 }
 
-@keyframes slide-up {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-25%); }
 }
-
-@keyframes scale-in {
-  from {
-    transform: scale(0.95);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
+@keyframes scan {
+  0%   { top: 0%; }
+  100% { top: 100%; }
+}
+@layer utilities {
+  .marquee { animation: marquee 28s linear infinite; }
+  .animate-scan { animation: scan 2.2s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate; }
+  .animate-rise { animation: rise 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+  .animate-tick { animation: tick 1s steps(2, jump-none) infinite; }
+  .bar-grow { transform-origin: left center; animation: bar-grow 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
 }
